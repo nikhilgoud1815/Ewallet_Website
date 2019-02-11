@@ -3,19 +3,16 @@ package com.cg.app.ewallet.website.resource;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
-import com.cg.app.ewallet.website.entity.EWallet;
-import com.cg.app.ewallet.website.entity.Statement;
-
 @Controller
+@EnableOAuth2Sso
 public class EWalletController {
 
 	@Autowired
@@ -55,10 +52,12 @@ public class EWalletController {
 		return "statements";
 	}
 
-	@RequestMapping("/statement/{profileId}")
+	@RequestMapping("/statement")
 	public String statement(@RequestParam Integer profileId, Model model) {
+		System.out.println(profileId);
 		ResponseEntity<List> entity = restTemplate
 				.getForEntity("http://localhost:7979/ewallets/statements/" + profileId, List.class);
+		System.out.println(entity.getBody());
 		model.addAttribute("statements", entity.getBody());
 		return "statements";
 	}
